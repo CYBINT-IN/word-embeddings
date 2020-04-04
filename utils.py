@@ -9,6 +9,8 @@ Created on Sat Apr  4 05:00:04 2020
 
 import fasttext
 import numpy as np
+import tensorflow as tf
+import tensorflow_hub as hub
 
 from tensorflow.keras.datasets import imdb
 from gensim.models import Word2Vec, FastText
@@ -72,7 +74,7 @@ def  prepare_data_for_word_vectors_imdb_tf(corpus):
             word_index = {dict} word and its indexes in whole of imdb corpus
     """
     tokenizer = Tokenizer()
-    sentences = tokenizer.fit_on_texts(X_train)
+    sentences = tokenizer.fit_on_texts(corpus)
     word_indexes = tokenizer.word_index
     
     return sentences, word_indexes
@@ -128,7 +130,7 @@ def data_prep_ELMo(train_x,train_y,test_x,test_y,max_len):
     return train_text,train_label,test_text,test_label
 
 
-def building_word_vector_model(option,sentences,embed_dim,workers,window,y_train):
+def building_word_vector_model(option, sentences, embed_dim, workers, window, y_train):
     """
         Builds the word vector
         Args:
@@ -143,12 +145,12 @@ def building_word_vector_model(option,sentences,embed_dim,workers,window,y_train
     """
     if option == 0:
         print("Training a word2vec model")
-        model = Word2Vec(sentences = sentences, size = embed_dim, workers = workers, window = window)
+        model = Word2Vec(sentences = sentences, size = embed_dim, workers = workers, window = window, epochs = 10)
         print("Training complete")
 
     elif option == 1:
         print("Training a Gensim FastText model")
-        model = FastText(sentences = sentences, size = embed_dim, workers = workers, window = window)
+        model = FastText(sentences = sentences, size = embed_dim, workers = workers, window = window, iter = 10)
         print("Training complete")
 
     elif option == 2:
