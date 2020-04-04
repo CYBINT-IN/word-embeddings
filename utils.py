@@ -168,3 +168,8 @@ def building_word_vector_model(option,sentences,embed_dim,workers,window,y_train
         print("Training complete")
 
     return model
+
+
+def ELMoEmbedding(x):
+    elmo_model = hub.Module("https://tfhub.dev/google/elmo/1", trainable = True)
+    return elmo_model(tf.squeeze(tf.cast(x, tf.string)), signature="default", as_dict = True)["default"]
