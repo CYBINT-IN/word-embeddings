@@ -101,3 +101,33 @@ def padding_input(X_train,X_test,maxlen):
     return X_train_pad, X_test_pad
 
 
+def data_prep_ELMo(train_x,train_y,test_x,test_y,max_len):
+
+    INDEX_FROM = 3
+    word_to_index = imdb.get_word_index()
+    word_to_index = {k:(v+INDEX_FROM) for k,v in word_to_index.items()}
+
+    word_to_index["<START>"] =1
+    word_to_index["<UNK>"]=2
+
+    index_to_word = {v:k for k,v in word_to_index.items()}
+
+    sentences=[]
+    for i in range(len(train_x)):
+        temp = [index_to_word[ids] for ids in train_x[i]]
+        sentences.append(temp)
+
+    test_sentences=[]
+    for i in range(len(test_x)):
+        temp = [index_to_word[ids] for ids in test_x[i]]
+        test_sentences.append(temp)
+
+    train_text = [' '.join(sentences[i][:max_len]) for i in range(len(sentences))]
+    train_text = np.array(train_text, dtype=object)[:, np.newaxis]
+    train_label = train_y.tolist()
+
+    test_text = [' '.join(test_sentences[i][:500]) for i in range(len(test_sentences))]
+    test_text = np.array(test_text , dtype=object)[:, np.newaxis]
+    test_label = test_y.tolist()
+
+    return train_text,train_label,test_text,test_label
