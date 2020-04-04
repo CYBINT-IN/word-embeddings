@@ -7,10 +7,11 @@ Created on Sat Apr  4 05:00:04 2020
 
 """
 
+import fasttext
 import numpy as np
-import tensorflow as tf
 
 from tensorflow.keras.datasets import imdb
+from gensim.models import Word2Vec, FastText
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
@@ -25,18 +26,12 @@ def load_data(vocab_size,max_len):
             X_train = tokenized train data
             X_test = tokenized test data
     """
-    # save np.load
-    np_load_old = np.load
-    
-    # modify the default parameters of np.load
-    np.load = lambda *a,**k: np_load_old(*a, allow_pickle=True, **k)
     
     INDEX_FROM = 3
+    # skip the words "the" and "and"
 
     (X_train,y_train),(X_test,y_test) = imdb.load_data(num_words = vocab_size,index_from = INDEX_FROM)
     
-    # restore np.load for future normal usage
-    np.load = np_load_old
         
     return X_train,X_test,y_train,y_test
 
@@ -64,10 +59,10 @@ def prepare_data_for_word_vectors_imdb(X_train):
         temp = [index_to_word[ids] for ids in X_train[i]]
         sentences.append(temp)
 
-    return sentences,word_to_index
+    return sentences, word_to_index
 
 
-def  prepare_data_for_word_vectors_imdb_tf(X_train):
+def  prepare_data_for_word_vectors_imdb_tf(corpus):
     """
         Prepares the input in a tf tokenizer format
         Args:
@@ -148,12 +143,12 @@ def building_word_vector_model(option,sentences,embed_dim,workers,window,y_train
     """
     if option == 0:
         print("Training a word2vec model")
-        model = Word2Vec(sentences=sentences, size = embed_dim, workers = workers, window = window)
+        model = Word2Vec(sentences = sentences, size = embed_dim, workers = workers, window = window)
         print("Training complete")
 
     elif option == 1:
         print("Training a Gensim FastText model")
-        model = FastText(sentences=sentences, size = embed_dim, workers = workers, window = window)
+        model = FastText(sentences = sentences, size = embed_dim, workers = workers, window = window)
         print("Training complete")
 
     elif option == 2:
