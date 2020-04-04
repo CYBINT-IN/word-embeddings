@@ -131,3 +131,40 @@ def data_prep_ELMo(train_x,train_y,test_x,test_y,max_len):
     test_label = test_y.tolist()
 
     return train_text,train_label,test_text,test_label
+
+
+def building_word_vector_model(option,sentences,embed_dim,workers,window,y_train):
+    """
+        Builds the word vector
+        Args:
+            type = {bool} 0 for Word2vec. 1 for gensim Fastext. 2 for Fasttext 2018.
+            sentences = {list} list of tokenized words
+            embed_dim = {int} embedding dimension of the word vectors
+            workers = {int} no. of worker threads to train the model (faster training with multicore machines)
+            window = {int} max distance between current and predicted word
+            y_train = y_train
+        Returns:
+            model = Word2vec/Gensim fastText/ Fastext_2018 model trained on the training corpus
+    """
+    if option == 0:
+        print("Training a word2vec model")
+        model = Word2Vec(sentences=sentences, size = embed_dim, workers = workers, window = window)
+        print("Training complete")
+
+    elif option == 1:
+        print("Training a Gensim FastText model")
+        model = FastText(sentences=sentences, size = embed_dim, workers = workers, window = window)
+        print("Training complete")
+
+    elif option == 2:
+        print("Training a Fasttext model from Facebook Research")
+        y_train = ["__label__positive" if i == 1 else "__label__negative" for i in y_train]
+
+        with open("imdb_train.txt","w") as text_file:
+            for i in range(len(sentences)):
+                print(sentences[i],y_train[i],file = text_file)
+
+        model = fasttext.skipgram("imdb_train.txt","model_ft_2018_imdb",dim = embed_dim)
+        print("Training complete")
+
+    return model
