@@ -13,7 +13,7 @@ x_train, x_test, y_train, y_test = utils.load_data(vocab_size = 10000, max_len =
 
 sentences, word_ix = utils.prepare_data_for_word_vectors_imdb(x_train)
 
-model_wv = utils.building_word_vector_model(option = 1,embed_dim = 100,
-                                       workers = 3, window = 3, sentences = sentences, y_train = y_train)
+model_wv = utils.building_word_vector_model(option = 1,embed_dim = 200,
+                                       workers = 3, window = 1, sentences = sentences, y_train = y_train)
 
 model_wv.save('model.model')
