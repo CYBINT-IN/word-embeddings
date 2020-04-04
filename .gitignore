@@ -7,3 +7,5 @@
 
 # Model Binaries Skipped
 *.bin
+*.npy
+*.model
