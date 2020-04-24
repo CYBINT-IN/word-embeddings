@@ -4,6 +4,7 @@
 # Data Skipped
 *.csv
 *.txt
+COVID-19 Research Data/data/
 
 # Model Binaries Skipped
 *.bin
