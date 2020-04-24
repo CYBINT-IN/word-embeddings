@@ -121,7 +121,7 @@ def generate_clean_df(all_files):
     
     return clean_df
 
-def read_corpus(df, column, tokens_only=False):
+def read_corpus(df, column, tokens_only = False):
     """
     Arguments
     ---------
@@ -139,3 +139,8 @@ def read_corpus(df, column, tokens_only=False):
         else:
             # For training data, add tags
             yield gensim.models.doc2vec.TaggedDocument(tokens, [i])
+            
+def get_doc_vector(doc, model):
+    tokens = gensim.parsing.preprocess_string(doc)
+    vector = model.infer_vector(tokens)
+    return vector
