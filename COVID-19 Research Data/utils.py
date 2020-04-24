@@ -8,6 +8,7 @@ Created on Fri Apr 24 15:36:02 2020
 
 import os
 import json
+import gensim
 
 import pandas as pd
 
@@ -119,3 +120,22 @@ def generate_clean_df(all_files):
     clean_df.head()
     
     return clean_df
+
+def read_corpus(df, column, tokens_only=False):
+    """
+    Arguments
+    ---------
+        df: pd.DataFrame
+        column: str 
+            text column name
+        tokens_only: bool
+            wether to add tags or not
+    """
+    for i, line in enumerate(df[column]):
+
+        tokens = gensim.parsing.preprocess_string(line)
+        if tokens_only:
+            yield tokens
+        else:
+            # For training data, add tags
+            yield gensim.models.doc2vec.TaggedDocument(tokens, [i])
