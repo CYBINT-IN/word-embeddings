@@ -11,10 +11,10 @@
   "initializer_range": 0.02,
   "intermediate_size": 3072,
   "layer_norm_eps": 1e-12,
-  "max_position_embeddings": 514,
+  "max_position_embeddings": 512,
   "model_type": "roberta",
   "num_attention_heads": 4,
-  "num_hidden_layers": 1,
+  "num_hidden_layers": 3,
   "pad_token_id": 1,
   "type_vocab_size": 1,
   "vocab_size": 5000
